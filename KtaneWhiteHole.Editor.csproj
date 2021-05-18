@@ -284,9 +284,6 @@
     <Reference Include="UnityEngine.StandardEvents">
       <HintPath>C:/Users/benja/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.standardevents@1.0.10/UnityEngine.StandardEvents.dll</HintPath>
     </Reference>
-    <Reference Include="0Harmony">
-      <HintPath>Assets/Plugins/Managed/0Harmony.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="KtaneWhiteHole.csproj">

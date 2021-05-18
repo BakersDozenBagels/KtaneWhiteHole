@@ -53,7 +53,7 @@ public class WhiteHoleModule : MonoBehaviour
     sealed class WhiteHoleBombInfo
     {
         public List<WhiteHoleModule> UnlinkedModules = new List<WhiteHoleModule>();
-        public Dictionary<WhiteHoleModule, GameObject> ModulePairs = new Dictionary<WhiteHoleModule, GameObject>();
+        public Dictionary<WhiteHoleModule, KMBombModule> ModulePairs = new Dictionary<WhiteHoleModule, KMBombModule>();
     }
 
     private static readonly Dictionary<string, WhiteHoleBombInfo> _infos = new Dictionary<string, WhiteHoleBombInfo>();
@@ -98,12 +98,44 @@ public class WhiteHoleModule : MonoBehaviour
     {
         yield return null;
 
-        List<KMBombModule> blackHoles = transform.root.GetComponentsInChildren<KMBombModule>().Where(m => m.ModuleDisplayName == "Black Hole").ToList();
-
-        if (blackHoles.Count != 0)
+        if (_info.ModulePairs.Count == 0)
         {
-            
+            List<KMBombModule> blackHoles = transform.root.GetComponentsInChildren<KMBombModule>().Where(m => m.ModuleDisplayName == "Black Hole").ToList();
+
+            int pairs = Math.Min(blackHoles.Count, _info.UnlinkedModules.Count);
+
+            if (pairs != 0)
+            {
+                for (int i = 0; i < pairs; i++)
+                    _info.ModulePairs.Add(_info.UnlinkedModules[i], blackHoles[i]);
+                _info.UnlinkedModules = _info.UnlinkedModules.Skip(pairs).ToList();
+            }
         }
 
+        yield return null;
+
+        if (_info.UnlinkedModules.Contains(this))
+        {
+
+        }
+        else
+        {
+            Component BHM = _info.ModulePairs[this].GetComponents<Component>().Where(c => c.GetType().Name == "BlackHoleModule").First();
+            Type BHMType = BHM.GetType();
+            BHMType.GetField("OnSwirlDisappear").SetValue(BHM, new Func<GameObject, bool>(ObtainSwirl));
+            BHMType.GetField("OnNumberDisappear").SetValue(BHM, new Func<GameObject, bool>(ObtainNumber));
+        }
+    }
+
+    private bool ObtainSwirl(GameObject swirl)
+    {
+        swirl.transform.parent = transform;
+        swirl.transform.localPosition = new Vector3(0f, 0f, 0f);
+        return false;
+    }
+
+    private bool ObtainNumber(GameObject swirl)
+    {
+        return true;
     }
 }
