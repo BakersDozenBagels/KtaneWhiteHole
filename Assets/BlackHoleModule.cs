@@ -228,6 +228,9 @@ public class BlackHoleModule : MonoBehaviour
             else
                 dir = ((dir - widgetCount) % 8 + 8) % 8;
 
+            Debug.Log("KH Starting dir: " + dir.ToString());
+            Debug.Log("KH clock: " + clockwise.ToString());
+
             // Compute the full solution code
             _info.DigitsExpected = _info.Modules.Count * 7;
             _info.SolutionCode = new List<int>();

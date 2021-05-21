@@ -14,7 +14,13 @@ MonoBehaviour:
   id: WhiteHole
   title: White Hole
   author: BakersDozenBagels
-  description: 
-  version: 0.1
+  description: 'The long-awaited sequel is here...
+
+
+    TP supported and Rule-Seed supported.
+
+
+    [url=https://github.com/BakersDozenBagels/KtaneWhiteHole]Github[/url]'
+  version: 1.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: bd5c1f4881f57d54481b44e4c8a7779a, type: 3}
