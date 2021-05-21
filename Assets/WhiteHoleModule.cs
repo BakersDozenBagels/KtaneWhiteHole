@@ -334,7 +334,7 @@ public class WhiteHoleModule : MonoBehaviour
                     y = serialNumberDigits.First() - '0';
                     break;
             }
-
+            rnd.Next(0, 6);
             // Initial direction
             int dir = new[] { 2, 4, 6, 0 }[rnd.Next(0, 4)]; // 0 = north, 1 = NE, etc.
             var initialClockwise = rnd.Next(0, 2) != 0;
@@ -596,7 +596,7 @@ public class WhiteHoleModule : MonoBehaviour
     }
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} arrow 3 [specify which arrow to press] | !{0} hole";
+    private readonly string TwitchHelpMessage = @"!{0} arrow 3 [specify which arrow to press, starting from the right, going counter-clockwise] | !{0} hole";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string command)
