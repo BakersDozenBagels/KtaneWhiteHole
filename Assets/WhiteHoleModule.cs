@@ -294,14 +294,8 @@ public class WhiteHoleModule : MonoBehaviour
             var num = rnd.Next(0, 10);
             for (var i = 0; i < num; i++)
                 rnd.NextDouble();
+			rnd.ShuffleFisherYates(new[] { 'a', 'b', 'c', 'd', new[] { 'e', 'f' }[rnd.Next(0, 2)], 'g' });
 
-            rnd.Next(0, 2);
-            rnd.NextDouble();
-            rnd.NextDouble();
-            rnd.NextDouble();
-            rnd.NextDouble();
-            rnd.NextDouble();
-            rnd.NextDouble();
             rnd.Next(0, 3);
 
             // Starting position in the grid
@@ -339,7 +333,7 @@ public class WhiteHoleModule : MonoBehaviour
             int dir = new[] { 2, 4, 6, 0 }[rnd.Next(0, 4)]; // 0 = north, 1 = NE, etc.
             var initialClockwise = rnd.Next(0, 2) != 0;
             var clockwise = _info.Clockwise = rnd.Next(0, 2) == 0; // Reversed from Black Hole
-            var widgetCount = new[] {
+			var widgetCount = new[] {
                 Bomb.GetBatteryCount() + Bomb.GetPortCount(),
                 Bomb.GetBatteryCount() + Bomb.GetIndicators().Count(),
                 Bomb.GetBatteryHolderCount() + Bomb.GetPortCount(),
@@ -350,7 +344,8 @@ public class WhiteHoleModule : MonoBehaviour
                 Bomb.GetBatteryCount(),
                 Bomb.GetBatteryHolderCount()
             }[rnd.Next(0, 9)];
-            if (initialClockwise)
+			Debug.LogFormat("<White Hole #{0}> Misc: X: {1} Y: {2} Dir: {3} WC: {4} IC: {5} C: {6}", _moduleId, x.ToString(), y.ToString(), dir.ToString(), widgetCount.ToString(), initialClockwise.ToString(), clockwise.ToString());
+			if (initialClockwise)
                 dir = (dir + widgetCount) % 8;
             else
                 dir = ((dir - widgetCount) % 8 + 8) % 8;
@@ -410,7 +405,7 @@ public class WhiteHoleModule : MonoBehaviour
             int a = rnd.Next(0, 4);
             int b = rnd.Next(0, 2);
 
-            Debug.LogFormat("<White Hole #{0}> Array indicies: {1} {2}", _moduleId, a.ToString(), b.ToString());
+            Debug.LogFormat("<White Hole #{0}> Rule array indicies: {1} {2}", _moduleId, a.ToString(), b.ToString());
 
             _info.SeedRule = new Func<float, float>[][] { new Func<float, float>[] { i => (360f - i) % 360f, i => i }, new Func<float, float>[] { i => (450f - i) % 360f, i => (i + 90f) % 360 }, new Func<float, float>[] { i => (540f - i) % 360f, i => (i + 180f) % 360 }, new Func<float, float>[] { i => (630f - i) % 360f, i => (i + 270f) % 360 } }[a][b];
         }
@@ -501,7 +496,8 @@ public class WhiteHoleModule : MonoBehaviour
 
     private IEnumerator NumberOut(GameObject number, bool IsCheck)
     {
-        particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+		if(!IsCheck)
+			particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         Audio.PlaySoundAtTransform("BlackHoleBlow", Selectable.transform);
         const float outDuration = 1.5f;
         float outElapsed = 0f;

@@ -163,7 +163,7 @@ Prefab:
     - target: {fileID: 114136031514722356, guid: cf75ae87715861a44a3f7d70d2d24427,
         type: 2}
       propertyPath: _seed
-      value: 621
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cf75ae87715861a44a3f7d70d2d24427, type: 2}
@@ -218,7 +218,7 @@ Prefab:
     - target: {fileID: 114136031514722356, guid: cf75ae87715861a44a3f7d70d2d24427,
         type: 2}
       propertyPath: _seed
-      value: 621
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cf75ae87715861a44a3f7d70d2d24427, type: 2}
@@ -557,7 +557,7 @@ Prefab:
     - target: {fileID: 114136031514722356, guid: cf75ae87715861a44a3f7d70d2d24427,
         type: 2}
       propertyPath: _seed
-      value: 621
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cf75ae87715861a44a3f7d70d2d24427, type: 2}
@@ -616,7 +616,7 @@ Prefab:
     - target: {fileID: 114786133493843886, guid: 1cd26128ca2f657468ea8053f6faf041,
         type: 2}
       propertyPath: _seed
-      value: 621
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1cd26128ca2f657468ea8053f6faf041, type: 2}
@@ -743,7 +743,7 @@ Prefab:
     - target: {fileID: 114786133493843886, guid: 1cd26128ca2f657468ea8053f6faf041,
         type: 2}
       propertyPath: _seed
-      value: 621
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1cd26128ca2f657468ea8053f6faf041, type: 2}
@@ -798,7 +798,7 @@ Prefab:
     - target: {fileID: 114136031514722356, guid: cf75ae87715861a44a3f7d70d2d24427,
         type: 2}
       propertyPath: _seed
-      value: 621
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cf75ae87715861a44a3f7d70d2d24427, type: 2}
