@@ -283,7 +283,7 @@ public class WhiteHoleModule : MonoBehaviour
         }
 
         // Only calculate the solution code once per bomb (Copied from Black Hole)
-        if (_info.SolutionCode == null)
+        if(_info.SolutionCode == null)
         {
             // SEEDED RULE GENERATION STARTS HERE
             var rnd = RuleSeedable.GetRNG();
@@ -292,16 +292,16 @@ public class WhiteHoleModule : MonoBehaviour
             // The RNG has the unfortunate property that the nth number generated is fairly predictable for many values of n.
             // Therefore, we inject more randomness by skipping a random(!) number of samples.
             var num = rnd.Next(0, 10);
-            for (var i = 0; i < num; i++)
+            for(var i = 0; i < num; i++)
                 rnd.NextDouble();
-			rnd.ShuffleFisherYates(new[] { 'a', 'b', 'c', 'd', new[] { 'e', 'f' }[rnd.Next(0, 2)], 'g' });
+            new[] { 'a', 'b', 'c', 'd', new[] { 'e', 'f' }[rnd.Next(0, 2)], 'g' }.OrderBy(_ => rnd.NextDouble()).ToArray();
 
             rnd.Next(0, 3);
 
             // Starting position in the grid
             int x, y;
             var serialNumberDigits = serialNumber.Where(ch => char.IsNumber(ch));
-            switch (rnd.Next(0, 6))
+            switch(rnd.Next(0, 6))
             {
                 case 0:
                     x = serialNumberDigits.First() - '0';
@@ -328,7 +328,6 @@ public class WhiteHoleModule : MonoBehaviour
                     y = serialNumberDigits.First() - '0';
                     break;
             }
-            rnd.Next(0, 6);
             // Initial direction
             int dir = new[] { 2, 4, 6, 0 }[rnd.Next(0, 4)]; // 0 = north, 1 = NE, etc.
             var initialClockwise = rnd.Next(0, 2) != 0;
@@ -404,6 +403,14 @@ public class WhiteHoleModule : MonoBehaviour
 
             int a = rnd.Next(0, 4);
             int b = rnd.Next(0, 2);
+
+            /*
+            if(rnd.Seed == 1)
+            {
+                a = 2;
+                b = 1;
+            }
+            */
 
             Debug.LogFormat("<White Hole #{0}> Rule array indicies: {1} {2}", _moduleId, a.ToString(), b.ToString());
 
