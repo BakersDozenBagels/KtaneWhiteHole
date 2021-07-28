@@ -440,7 +440,7 @@ public class BlackHoleModule : MonoBehaviour
         }
 
         _swirlsVisible[ix] = null;
-        if(OnSwirlDisappear(swirl.gameObject))
+        if (OnSwirlDisappear(swirl.gameObject))
             Destroy(swirl.gameObject);
     }
 

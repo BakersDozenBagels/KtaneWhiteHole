@@ -166,7 +166,7 @@ public class WhiteHoleModule : MonoBehaviour
                     _info.LastDigitEntered = null;
                     if (_digitsExpected > _digitsEntered + 1) { StartCoroutine(CreateSwirl(6 - wholeswirlcount)); wholeswirlcount++; }
                     if (_digitsExpected > _digitsEntered + 2) { StartCoroutine(CreateSwirl(6 - wholeswirlcount)); wholeswirlcount++; }
-                        
+
                     _info.DigitsExpected = Math.Max(_info.DigitsEntered + 1, _info.DigitsExpected - 2);
                     _digitsExpected = Math.Max(_digitsEntered + 1, _digitsExpected - 2);
                 }
@@ -279,7 +279,7 @@ public class WhiteHoleModule : MonoBehaviour
             BHMType = BHM.GetType();
             BHMType.GetField("OnSwirlDisappear", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(BHM, new Func<GameObject, bool>(ObtainSwirl));
             BHMType.GetField("OnNumberDisappear", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(BHM, new Func<GameObject, bool>(ObtainNumber));
-            Debug.LogFormat("[White Hole #{0}] I am linked to Black Hole #{1}.", _moduleId, (int)BHMType.GetField("_moduleId", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(BHM));
+            Debug.LogFormat("[White Hole #{0}] I am linked to Black Hole #{1}.", _moduleId, (int) BHMType.GetField("_moduleId", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(BHM));
         }
 
         // Only calculate the solution code once per bomb (Copied from Black Hole)
@@ -328,11 +328,12 @@ public class WhiteHoleModule : MonoBehaviour
                     y = serialNumberDigits.First() - '0';
                     break;
             }
+
             // Initial direction
             int dir = new[] { 2, 4, 6, 0 }[rnd.Next(0, 4)]; // 0 = north, 1 = NE, etc.
             var initialClockwise = rnd.Next(0, 2) != 0;
             var clockwise = _info.Clockwise = rnd.Next(0, 2) == 0; // Reversed from Black Hole
-			var widgetCount = new[] {
+            var widgetCount = new[] {
                 Bomb.GetBatteryCount() + Bomb.GetPortCount(),
                 Bomb.GetBatteryCount() + Bomb.GetIndicators().Count(),
                 Bomb.GetBatteryHolderCount() + Bomb.GetPortCount(),
@@ -343,8 +344,8 @@ public class WhiteHoleModule : MonoBehaviour
                 Bomb.GetBatteryCount(),
                 Bomb.GetBatteryHolderCount()
             }[rnd.Next(0, 9)];
-			Debug.LogFormat("<White Hole #{0}> Misc: X: {1} Y: {2} Dir: {3} WC: {4} IC: {5} C: {6}", _moduleId, x.ToString(), y.ToString(), dir.ToString(), widgetCount.ToString(), initialClockwise.ToString(), clockwise.ToString());
-			if (initialClockwise)
+            Debug.LogFormat("<White Hole #{0}> Misc: X: {1} Y: {2} Dir: {3} WC: {4} IC: {5} C: {6}", _moduleId, x.ToString(), y.ToString(), dir.ToString(), widgetCount.ToString(), initialClockwise.ToString(), clockwise.ToString());
+            if (initialClockwise)
                 dir = (dir + widgetCount) % 8;
             else
                 dir = ((dir - widgetCount) % 8 + 8) % 8;
@@ -404,15 +405,7 @@ public class WhiteHoleModule : MonoBehaviour
             int a = rnd.Next(0, 4);
             int b = rnd.Next(0, 2);
 
-            /*
-            if(rnd.Seed == 1)
-            {
-                a = 2;
-                b = 1;
-            }
-            */
-
-            Debug.LogFormat("<White Hole #{0}> Rule array indicies: {1} {2}", _moduleId, a.ToString(), b.ToString());
+            Debug.LogFormat("<White Hole #{0}> Rule array indicies: {1} {2}", _moduleId, new[] { "right", "top", "left", "bottom" }[a], new[] { "clockwise", "counter-clockwise" }[b]);
 
             _info.SeedRule = new Func<float, float>[][] { new Func<float, float>[] { i => (360f - i) % 360f, i => i }, new Func<float, float>[] { i => (450f - i) % 360f, i => (i + 90f) % 360 }, new Func<float, float>[] { i => (540f - i) % 360f, i => (i + 180f) % 360 }, new Func<float, float>[] { i => (630f - i) % 360f, i => (i + 270f) % 360 } }[a][b];
         }
@@ -420,7 +413,7 @@ public class WhiteHoleModule : MonoBehaviour
         {
             Debug.LogFormat(@"[White Hole #{0}] Unlinked modules Black Hole code = {1}", _moduleId, _info.SolutionCode.JoinString(" "));
             string code = "";
-            for(int i = 0; i < _info.SolutionCode.Count; i++)
+            for (int i = 0; i < _info.SolutionCode.Count; i++)
             {
                 code += _info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 1 : 7) * i) % 8][_info.SolutionCode[i]]).ToString() + " ";
             }
@@ -492,7 +485,7 @@ public class WhiteHoleModule : MonoBehaviour
         if (_SuppressStrikes && !isCurrentAngleSet)
             Arrows[Mathf.RoundToInt((_info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 7 : 1) * (_info.BlackHoleDigitsEntered - 1)) % 8][int.Parse(number.GetComponentInChildren<TextMesh>().text)]) - 22.5f) / 45f)].OnInteract();
 
-        Debug.LogFormat("[White Hole #{0}] Obtained a{2} number: {1}", _moduleId, number.GetComponentInChildren<TextMesh>().text, IsCheck ? " (check)": "");
+        Debug.LogFormat("[White Hole #{0}] Obtained a{2} number: {1}", _moduleId, number.GetComponentInChildren<TextMesh>().text, IsCheck ? " (check)" : "");
 
         number.transform.parent = Selectable.transform;
         number.transform.localPosition = new Vector3(0f, 0f, 0f);
@@ -503,8 +496,8 @@ public class WhiteHoleModule : MonoBehaviour
 
     private IEnumerator NumberOut(GameObject number, bool IsCheck)
     {
-		if(!IsCheck)
-			particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        if (!IsCheck)
+            particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         Audio.PlaySoundAtTransform("BlackHoleBlow", Selectable.transform);
         const float outDuration = 1.5f;
         float outElapsed = 0f;

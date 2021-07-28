@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{8B9C241A-2F8F-DACB-921C-21A6247D0BE8}</ProjectGuid>
+    <ProjectGuid>{1C5EA9AF-D085-505C-052E-3CD29D04DA43}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -81,6 +81,7 @@
      <Compile Include="Assets\TestHarness\Widgets\TwoFactorWidget.cs" />
      <Compile Include="Assets\TestHarness\Widgets\Widget.cs" />
      <Compile Include="Assets\Ut.cs" />
+     <Compile Include="Assets\WhiteHoleModule.cs" />
      <None Include="Assets\Shaders\KT_3D_Text-Diffuse.shader" />
      <None Include="Assets\Shaders\BlendTwoTexturesUnlit.shader" />
      <None Include="Assets\Shaders\BlendTwoTexturesLitAndUnlitVertexColor.shader" />
@@ -260,10 +261,10 @@
  <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
  </Reference>
  <Reference Include="KMFramework">
- <HintPath>D:/c/KTANE/BlackHole/Assets/Plugins/Managed/KMFramework.dll</HintPath>
+ <HintPath>D:/c/KTANE/WhiteHole/Assets/Plugins/Managed/KMFramework.dll</HintPath>
  </Reference>
  <Reference Include="Newtonsoft.Json">
- <HintPath>D:/c/KTANE/BlackHole/Assets/Plugins/Managed/Newtonsoft.Json.dll</HintPath>
+ <HintPath>D:/c/KTANE/WhiteHole/Assets/Plugins/Managed/Newtonsoft.Json.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Analytics">
  <HintPath>C:/Users/Timwi/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.13/UnityEngine.Analytics.dll</HintPath>
