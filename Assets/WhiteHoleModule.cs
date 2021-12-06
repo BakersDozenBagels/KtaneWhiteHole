@@ -60,7 +60,7 @@ public class WhiteHoleModule : MonoBehaviour
         public int StartDirection;
         public bool Clockwise;
         public List<int> BlackHoleCode;
-        public Func<float, float> SeedRule;
+        public Func<float, float> SeedRule = f => f;
     }
 
     private static readonly Dictionary<string, WhiteHoleBombInfo> _infos = new Dictionary<string, WhiteHoleBombInfo>();
@@ -87,7 +87,7 @@ public class WhiteHoleModule : MonoBehaviour
         _moduleId = _moduleIdCounter++;
 
         var serialNumber = Bomb.GetSerialNumber();
-        if (!_infos.ContainsKey(serialNumber))
+        if(!_infos.ContainsKey(serialNumber))
             _infos[serialNumber] = new WhiteHoleBombInfo();
         _info = _infos[serialNumber];
         _info.UnlinkedModules.Add(this);
@@ -96,7 +96,7 @@ public class WhiteHoleModule : MonoBehaviour
         Bomb.OnBombSolved += delegate
         {
             // This check is necessary because this delegate gets called even if another bomb in the same room got solved instead of this one
-            if (Bomb.GetSolvedModuleNames().Count == Bomb.GetSolvableModuleNames().Count)
+            if(Bomb.GetSolvedModuleNames().Count == Bomb.GetSolvableModuleNames().Count)
                 _infos.Remove(serialNumber);
         };
 
@@ -116,7 +116,7 @@ public class WhiteHoleModule : MonoBehaviour
 
     private void Activate()
     {
-        for (int i = 0; i < Arrows.Length; i++)
+        for(int i = 0; i < Arrows.Length; i++)
         {
             int j = i;
             Arrows[i].OnInteract += () => ArrowPress(j);
@@ -129,7 +129,7 @@ public class WhiteHoleModule : MonoBehaviour
         GameObject cont = Instantiate(ContainerTemplate, SwirlContainer);
         cont.transform.localScale = new Vector3(0f, 0f, 0f);
         cont.SetActive(true);
-        for (int i = 0; i < 7; i++)
+        for(int i = 0; i < 7; i++)
         {
             var ct = Instantiate(ContainerTemplate, cont.transform);
             ct.transform.localPosition = new Vector3(0f, 0f, 0f);
@@ -145,7 +145,7 @@ public class WhiteHoleModule : MonoBehaviour
         }
         StartCoroutine(SwirlOut(cont, Rnd.Range(.99f, 1.05f)));
         float rotationSpeed = Rnd.Range(10f, 30f);
-        while (true)
+        while(true)
         {
             cont.transform.localEulerAngles -= new Vector3(0f, 0f, rotationSpeed * Time.deltaTime);
             yield return null;
@@ -154,18 +154,18 @@ public class WhiteHoleModule : MonoBehaviour
 
     private void Update()
     {
-        if (!_isSolved && _info.UnlinkedModules.Contains(this))
+        if(!_isSolved && _info.UnlinkedModules.Contains(this))
         {
             var solved = Bomb.GetSolvedModuleNames().Where(mn => mn != "Black Hole").Count();
-            if (solved != _lastSolved)
+            if(solved != _lastSolved)
             {
                 _lastSolved = solved;
-                if (_info.LastDigitEntered == this)
+                if(_info.LastDigitEntered == this)
                 {
                     Debug.LogFormat(@"[White Hole #{0}] You solved another module, so 2 digits are slashed from the code.", _moduleId);
                     _info.LastDigitEntered = null;
-                    if (_digitsExpected > _digitsEntered + 1) { StartCoroutine(CreateSwirl(6 - wholeswirlcount)); wholeswirlcount++; }
-                    if (_digitsExpected > _digitsEntered + 2) { StartCoroutine(CreateSwirl(6 - wholeswirlcount)); wholeswirlcount++; }
+                    if(_digitsExpected > _digitsEntered + 1) { StartCoroutine(CreateSwirl(6 - wholeswirlcount)); wholeswirlcount++; }
+                    if(_digitsExpected > _digitsEntered + 2) { StartCoroutine(CreateSwirl(6 - wholeswirlcount)); wholeswirlcount++; }
 
                     _info.DigitsExpected = Math.Max(_info.DigitsEntered + 1, _info.DigitsExpected - 2);
                     _digitsExpected = Math.Max(_digitsEntered + 1, _digitsExpected - 2);
@@ -176,9 +176,9 @@ public class WhiteHoleModule : MonoBehaviour
 
     private bool HolePress()
     {
-        if (_isSolved)
+        if(_isSolved)
             return false;
-        if (_info.UnlinkedModules.Contains(this))
+        if(_info.UnlinkedModules.Contains(this))
         {
             var cont = Instantiate(ContainerTemplate);
             cont.transform.parent = SwirlContainer.parent;
@@ -204,7 +204,7 @@ public class WhiteHoleModule : MonoBehaviour
             StartCoroutine(NumberOut(cont, false));
             _info.DigitsEntered++;
             _digitsEntered++;
-            if (_digitsEntered >= _digitsExpected)
+            if(_digitsEntered >= _digitsExpected)
             {
                 Debug.LogFormat("[White Hole #{0}] Module solved!", _moduleId);
                 _isSolved = true;
@@ -213,7 +213,7 @@ public class WhiteHoleModule : MonoBehaviour
         }
         else
         {
-            if (_digitsEntered + 1 > _digitsExpected)
+            if(_digitsEntered + 1 > _digitsExpected)
             {
                 Debug.LogFormat("[White Hole {0}] Module solved! Inputs now disabled.", _moduleId);
                 _isSolved = true;
@@ -222,7 +222,7 @@ public class WhiteHoleModule : MonoBehaviour
             else
             {
                 Debug.LogFormat("[White Hole {0}] I struck, as not enough directions have been entered.", _moduleId);
-                if (!_SuppressStrikes)
+                if(!_SuppressStrikes)
                     Module.HandleStrike();
             }
         }
@@ -232,7 +232,7 @@ public class WhiteHoleModule : MonoBehaviour
     private bool ArrowPress(int arrowId)
     {
         Arrows[arrowId].AddInteractionPunch(0.1f);
-        if (isCurrentAngleSet || _isSolved)
+        if(isCurrentAngleSet || _isSolved)
             return false;
         currentAngle = 22.5f + 45f * arrowId;
         particles.transform.localEulerAngles = new Vector3(0f, 0f, 45f * arrowId);
@@ -249,37 +249,38 @@ public class WhiteHoleModule : MonoBehaviour
         particles.transform.localScale *= transform.lossyScale.x;
         particles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
-        if (_info.ModulePairs.Count == 0)
+        if(_info.ModulePairs.Count == 0)
         {
             List<KMBombModule> blackHoles = transform.root.GetComponentsInChildren<KMBombModule>().Where(m => m.ModuleDisplayName == "Black Hole").ToList();
 
             int pairs = Math.Min(blackHoles.Count, _info.UnlinkedModules.Count);
 
-            if (pairs != 0)
+            if(pairs != 0)
             {
-                for (int i = 0; i < pairs; i++)
+                for(int i = 0; i < pairs; i++)
                     _info.ModulePairs.Add(_info.UnlinkedModules[i], blackHoles[i]);
                 _info.UnlinkedModules = _info.UnlinkedModules.Skip(pairs).ToList();
-                if (BHMType == null)
+                if(BHMType == null)
                     BHMType = blackHoles.First().GetComponents<Component>().Where(c => c.GetType().Name == "BlackHoleModule").First().GetType();
-                for (int i = pairs; i < blackHoles.Count; i++)
-                    BHMType.GetField("OnNumberDisappear").SetValue(blackHoles[i], new Func<GameObject, bool>(x => { if (x.GetComponentInChildren<TextMesh>().color == Color.white) _info.BlackHoleDigitsEntered++; return true; }));
+                for(int i = pairs; i < blackHoles.Count; i++)
+                    BHMType.GetField("OnNumberDisappear", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(blackHoles[i].GetComponents<Component>().Where(c => c.GetType().Name == "BlackHoleModule").First(), new Func<GameObject, bool>(x => { if(x.GetComponentInChildren<TextMesh>().color != Color.white) _info.BlackHoleDigitsEntered++; return true; }));
             }
         }
 
         yield return null;
 
-        if (_info.UnlinkedModules.Contains(this))
+        if(_info.UnlinkedModules.Contains(this))
         {
             Debug.LogFormat("[White Hole #{0}] I am unlinked.", _moduleId);
         }
         else
         {
             Component BHM = _info.ModulePairs[this].GetComponents<Component>().Where(c => c.GetType().Name == "BlackHoleModule").First();
-            BHMType = BHM.GetType();
+            if(BHMType == null)
+                BHMType = BHM.GetType();
             BHMType.GetField("OnSwirlDisappear", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(BHM, new Func<GameObject, bool>(ObtainSwirl));
             BHMType.GetField("OnNumberDisappear", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(BHM, new Func<GameObject, bool>(ObtainNumber));
-            Debug.LogFormat("[White Hole #{0}] I am linked to Black Hole #{1}.", _moduleId, (int) BHMType.GetField("_moduleId", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(BHM));
+            Debug.LogFormat("[White Hole #{0}] I am linked to Black Hole #{1}.", _moduleId, (int)BHMType.GetField("_moduleId", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(BHM));
         }
 
         // Only calculate the solution code once per bomb (Copied from Black Hole)
@@ -345,7 +346,7 @@ public class WhiteHoleModule : MonoBehaviour
                 Bomb.GetBatteryHolderCount()
             }[rnd.Next(0, 9)];
             Debug.LogFormat("<White Hole #{0}> Misc: X: {1} Y: {2} Dir: {3} WC: {4} IC: {5} C: {6}", _moduleId, x.ToString(), y.ToString(), dir.ToString(), widgetCount.ToString(), initialClockwise.ToString(), clockwise.ToString());
-            if (initialClockwise)
+            if(initialClockwise)
                 dir = (dir + widgetCount) % 8;
             else
                 dir = ((dir - widgetCount) % 8 + 8) % 8;
@@ -360,19 +361,19 @@ public class WhiteHoleModule : MonoBehaviour
             int x2 = x;
             int y2 = y;
 
-            for (int i = 0; i < _info.DigitsExpected; i++)
+            for(int i = 0; i < _info.DigitsExpected; i++)
             {
                 var digit = 0;
-                for (int j = 0; j < i + 1; j++)
+                for(int j = 0; j < i + 1; j++)
                 {
                     digit = (digit + _grid[y][x]) % 5;
-                    if (dir == 1 || dir == 2 || dir == 3)
+                    if(dir == 1 || dir == 2 || dir == 3)
                         x = (x + 1) % 10;
-                    else if (dir == 5 || dir == 6 || dir == 7)
+                    else if(dir == 5 || dir == 6 || dir == 7)
                         x = (x + 9) % 10;
-                    if (dir == 7 || dir == 0 || dir == 1)
+                    if(dir == 7 || dir == 0 || dir == 1)
                         y = (y + 9) % 10;
-                    else if (dir == 3 || dir == 4 || dir == 5)
+                    else if(dir == 3 || dir == 4 || dir == 5)
                         y = (y + 1) % 10;
                 }
                 _info.SolutionCode.Add(digit);
@@ -383,19 +384,19 @@ public class WhiteHoleModule : MonoBehaviour
             x = x2;
             y = y2;
 
-            for (int i = 0; i < transform.root.GetComponentsInChildren<KMBombModule>().Where(m => m.ModuleDisplayName == "Black Hole").Count() * 7; i++)
+            for(int i = 0; i < transform.root.GetComponentsInChildren<KMBombModule>().Where(m => m.ModuleDisplayName == "Black Hole").Count() * 7; i++)
             {
                 var digit = 0;
-                for (int j = 0; j < i + 1; j++)
+                for(int j = 0; j < i + 1; j++)
                 {
                     digit = (digit + _grid[y][x]) % 5;
-                    if (dir == 1 || dir == 2 || dir == 3)
+                    if(dir == 1 || dir == 2 || dir == 3)
                         x = (x + 1) % 10;
-                    else if (dir == 5 || dir == 6 || dir == 7)
+                    else if(dir == 5 || dir == 6 || dir == 7)
                         x = (x + 9) % 10;
-                    if (dir == 7 || dir == 0 || dir == 1)
+                    if(dir == 7 || dir == 0 || dir == 1)
                         y = (y + 9) % 10;
-                    else if (dir == 3 || dir == 4 || dir == 5)
+                    else if(dir == 3 || dir == 4 || dir == 5)
                         y = (y + 1) % 10;
                 }
                 _info.BlackHoleCode.Add(digit);
@@ -409,11 +410,11 @@ public class WhiteHoleModule : MonoBehaviour
 
             _info.SeedRule = new Func<float, float>[][] { new Func<float, float>[] { i => (360f - i) % 360f, i => i }, new Func<float, float>[] { i => (450f - i) % 360f, i => (i + 90f) % 360 }, new Func<float, float>[] { i => (540f - i) % 360f, i => (i + 180f) % 360 }, new Func<float, float>[] { i => (630f - i) % 360f, i => (i + 270f) % 360 } }[a][b];
         }
-        if (_info.UnlinkedModules.Contains(this))
+        if(_info.UnlinkedModules.Contains(this))
         {
             Debug.LogFormat(@"[White Hole #{0}] Unlinked modules Black Hole code = {1}", _moduleId, _info.SolutionCode.JoinString(" "));
             string code = "";
-            for (int i = 0; i < _info.SolutionCode.Count; i++)
+            for(int i = 0; i < _info.SolutionCode.Count; i++)
             {
                 code += _info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 1 : 7) * i) % 8][_info.SolutionCode[i]]).ToString() + " ";
             }
@@ -422,7 +423,7 @@ public class WhiteHoleModule : MonoBehaviour
         else
         {
             string code = "";
-            for (int i = 0; i < _info.BlackHoleCode.Count; i++)
+            for(int i = 0; i < _info.BlackHoleCode.Count; i++)
             {
                 code += _info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 7 : 1) * i) % 8][_info.BlackHoleCode[i]]).ToString() + " ";
             }
@@ -441,7 +442,7 @@ public class WhiteHoleModule : MonoBehaviour
         StartCoroutine(SwirlRotate(swirl, speed));
 
         swirlcount++;
-        if (swirlcount >= 7)
+        if(swirlcount >= 7)
         {
             speed = Rnd.Range(10f, 30f);
             swirlcount = 0;
@@ -453,7 +454,7 @@ public class WhiteHoleModule : MonoBehaviour
 
     private IEnumerator SwirlRotate(GameObject swirl, float speed)
     {
-        while (true)
+        while(true)
         {
             swirl.transform.localEulerAngles -= new Vector3(0f, 0f, speed * Time.deltaTime);
             yield return null;
@@ -465,7 +466,7 @@ public class WhiteHoleModule : MonoBehaviour
         float duration = 1f;
         float elapsed = 0f;
         float start = 0.9f;
-        while (elapsed < duration)
+        while(elapsed < duration)
         {
             yield return null;
             elapsed += Time.deltaTime;
@@ -477,12 +478,12 @@ public class WhiteHoleModule : MonoBehaviour
     private bool ObtainNumber(GameObject number)
     {
         bool IsCheck;
-        if (IsCheck = number.GetComponentInChildren<TextMesh>().color == Color.white)
+        if(IsCheck = number.GetComponentInChildren<TextMesh>().color == Color.white)
             number.GetComponentInChildren<TextMesh>().color = Color.black;
         else
             _info.BlackHoleDigitsEntered++;
 
-        if (_SuppressStrikes && !isCurrentAngleSet)
+        if(_SuppressStrikes && !isCurrentAngleSet)
             Arrows[Mathf.RoundToInt((_info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 7 : 1) * (_info.BlackHoleDigitsEntered - 1)) % 8][int.Parse(number.GetComponentInChildren<TextMesh>().text)]) - 22.5f) / 45f)].OnInteract();
 
         Debug.LogFormat("[White Hole #{0}] Obtained a{2} number: {1}", _moduleId, number.GetComponentInChildren<TextMesh>().text, IsCheck ? " (check)" : "");
@@ -496,27 +497,27 @@ public class WhiteHoleModule : MonoBehaviour
 
     private IEnumerator NumberOut(GameObject number, bool IsCheck)
     {
-        if (!IsCheck)
+        if(!IsCheck)
             particles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         Audio.PlaySoundAtTransform("BlackHoleBlow", Selectable.transform);
         const float outDuration = 1.5f;
         float outElapsed = 0f;
         float rotationSpeed = Rnd.Range(25f, 40f);
-        if (!IsCheck && _info.UnlinkedModules.Contains(this)) { StartCoroutine(CreateSwirl(6 - wholeswirlcount)); wholeswirlcount++; }
-        if (IsCheck || !isCurrentAngleSet)
+        if(!IsCheck && _info.UnlinkedModules.Contains(this)) { StartCoroutine(CreateSwirl(6 - wholeswirlcount)); wholeswirlcount++; }
+        if(IsCheck || !isCurrentAngleSet)
         {
-            if (!isCurrentAngleSet && !IsCheck)
+            if(!isCurrentAngleSet && !IsCheck)
             {
                 Debug.LogFormat("[White Hole #{0}] You didn't choose a direction, so I struck.", _moduleId);
-                if (!_SuppressStrikes)
+                if(!_SuppressStrikes)
                     Module.HandleStrike();
             }
-            while (true)
+            while(true)
             {
                 outElapsed += Time.deltaTime;
                 number.transform.localEulerAngles -= new Vector3(0f, 0f, rotationSpeed * Time.deltaTime);
                 number.transform.GetChild(0).localEulerAngles -= new Vector3(0f, 0f, 2 * rotationSpeed * Time.deltaTime);
-                if (outElapsed >= outDuration)
+                if(outElapsed >= outDuration)
                 {
                     Destroy(number);
                     yield break;
@@ -532,12 +533,12 @@ public class WhiteHoleModule : MonoBehaviour
         else
         {
             CheckDirection(int.Parse(number.GetComponentInChildren<TextMesh>().text), !_info.UnlinkedModules.Contains(this));
-            while (true)
+            while(true)
             {
                 outElapsed += Time.deltaTime;
                 number.transform.localEulerAngles -= new Vector3(0f, 0f, rotationSpeed * Time.deltaTime);
                 number.transform.GetChild(0).localEulerAngles -= new Vector3(0f, 0f, 2 * rotationSpeed * Time.deltaTime);
-                if (outElapsed >= outDuration)
+                if(outElapsed >= outDuration)
                 {
                     isCurrentAngleSet = false;
                     Destroy(number);
@@ -567,25 +568,25 @@ public class WhiteHoleModule : MonoBehaviour
 
     private void CheckDirection(int digit, bool isBlack)
     {
-        if (isBlack)
+        if(isBlack)
         {
-            if (currentAngle == _info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 7 : 1) * (_info.BlackHoleDigitsEntered - 1)) % 8][digit]))
+            if(currentAngle == _info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 7 : 1) * (_info.BlackHoleDigitsEntered - 1)) % 8][digit]))
                 Debug.LogFormat("[White Hole #{0}] That was the correct direction. Good job!", _moduleId);
             else
             {
                 Debug.LogFormat("[White Hole #{0}] That wasn't correct. The correct direction was {1} degrees.", _moduleId, _info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 7 : 1) * (_info.BlackHoleDigitsEntered - 1)) % 8][digit]));
-                if (!_SuppressStrikes)
+                if(!_SuppressStrikes)
                     Module.HandleStrike();
             }
         }
         else
         {
-            if (currentAngle == _info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 1 : 7) * _info.DigitsEntered) % 8][digit]))
+            if(currentAngle == _info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 1 : 7) * _info.DigitsEntered) % 8][digit]))
                 Debug.LogFormat("[White Hole #{0}] That was the correct direction. Good job!", _moduleId);
             else
             {
                 Debug.LogFormat("[White Hole #{0}] That wasn't correct. The correct direction was {1} degrees.", _moduleId, _info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 1 : 7) * _info.DigitsEntered) % 8][digit]));
-                if (!_SuppressStrikes)
+                if(!_SuppressStrikes)
                     Module.HandleStrike();
             }
         }
@@ -597,26 +598,26 @@ public class WhiteHoleModule : MonoBehaviour
 
     IEnumerator ProcessTwitchCommand(string command)
     {
-        if (_isSolved || _SuppressStrikes)
+        if(_isSolved || _SuppressStrikes)
             yield break;
 
         var instructions = command.Split(new[] { ',', ';', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(str => str.Trim().ToLowerInvariant()).ToArray();
 
         List<KMSelectable> queue = new List<KMSelectable>();
 
-        for (int i = 0; i < instructions.Length; i++)
+        for(int i = 0; i < instructions.Length; i++)
         {
-            if (instructions[i] == "hole")
+            if(instructions[i] == "hole")
                 queue.Add(Selectable);
-            else if (instructions[i] == "arrow")
+            else if(instructions[i] == "arrow")
             {
                 i++;
-                if (i == instructions.Length)
+                if(i == instructions.Length)
                 {
                     yield return "sendtochaterror Invalid arrow number: (none received)";
                     yield break;
                 }
-                if ("1 2 3 4 5 6 7 8".Contains(instructions[i]))
+                if("1 2 3 4 5 6 7 8".Contains(instructions[i]))
                     queue.Add(Arrows[(int.Parse(instructions[i]) + 5) % 8]);
                 else
                 {
@@ -637,17 +638,17 @@ public class WhiteHoleModule : MonoBehaviour
 
     IEnumerator TwitchHandleForcedSolve()
     {
-        if (_isSolved || _SuppressStrikes)
+        if(_isSolved || _SuppressStrikes)
             yield break;
 
         _SuppressStrikes = true;
 
-        if (_info.UnlinkedModules.Contains(this))
+        if(_info.UnlinkedModules.Contains(this))
         {
-            if (isCurrentAngleSet)
+            if(isCurrentAngleSet)
                 Selectable.OnInteract();
 
-            while (_digitsEntered < _digitsExpected)
+            while(_digitsEntered < _digitsExpected)
             {
                 currentAngle = _info.SeedRule(table[(_info.StartDirection + (_info.Clockwise ? 1 : 7) * _info.DigitsEntered) % 8][_info.SolutionCode[_info.DigitsEntered]]);
                 particles.transform.localEulerAngles = new Vector3(0f, 0f, currentAngle - 22.5f);
@@ -656,7 +657,7 @@ public class WhiteHoleModule : MonoBehaviour
                 isCurrentAngleSet = true;
 
                 Selectable.OnInteract();
-                foreach (var obj in WaitWithTrue(Rnd.Range(2.0f, 2.5f)))
+                foreach(var obj in WaitWithTrue(Rnd.Range(2.0f, 2.5f)))
                     yield return obj;
             }
         }
@@ -664,9 +665,9 @@ public class WhiteHoleModule : MonoBehaviour
         {
             yield return "sendtochat This module will solve immediately after its linked black hole solves. It will not strike, and no further inputs will be registered.";
             Debug.LogFormat("[White Hole #{0}] This module will solve immediately after its linked black hole solves. It will not strike, and no further inputs will be registered", _moduleId);
-            while (_digitsEntered < _digitsExpected)
+            while(_digitsEntered < _digitsExpected)
                 yield return true;
-            foreach (var obj in WaitWithTrue(0.5f))
+            foreach(var obj in WaitWithTrue(0.5f))
                 yield return obj;
             Selectable.OnInteract();
         }
@@ -675,7 +676,7 @@ public class WhiteHoleModule : MonoBehaviour
     IEnumerable WaitWithTrue(float time)
     {
         var startTime = Time.time;
-        while (Time.time < startTime + time)
+        while(Time.time < startTime + time)
             yield return true;
     }
 }
