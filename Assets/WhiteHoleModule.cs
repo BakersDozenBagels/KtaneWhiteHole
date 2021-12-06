@@ -261,7 +261,7 @@ public class WhiteHoleModule : MonoBehaviour
                     _info.ModulePairs.Add(_info.UnlinkedModules[i], blackHoles[i]);
                 _info.UnlinkedModules = _info.UnlinkedModules.Skip(pairs).ToList();
                 if (BHMType == null)
-                    BHMType = blackHoles.First().GetType();
+                    BHMType = blackHoles.First().GetComponents<Component>().Where(c => c.GetType().Name == "BlackHoleModule").First().GetType();
                 for (int i = pairs; i < blackHoles.Count; i++)
                     BHMType.GetField("OnNumberDisappear").SetValue(blackHoles[i], new Func<GameObject, bool>(x => { if (x.GetComponentInChildren<TextMesh>().color == Color.white) _info.BlackHoleDigitsEntered++; return true; }));
             }
@@ -592,7 +592,7 @@ public class WhiteHoleModule : MonoBehaviour
     }
 
 #pragma warning disable 414
-    private readonly string TwitchHelpMessage = @"!{0} arrow 3 [specify which arrow to press, starting from the right, going counter-clockwise] | !{0} hole";
+    private readonly string TwitchHelpMessage = @"!{0} arrow 3 [specify which arrow to press, starting from the bottom, going counter-clockwise] | !{0} hole";
 #pragma warning restore 414
 
     IEnumerator ProcessTwitchCommand(string command)
@@ -617,7 +617,7 @@ public class WhiteHoleModule : MonoBehaviour
                     yield break;
                 }
                 if ("1 2 3 4 5 6 7 8".Contains(instructions[i]))
-                    queue.Add(Arrows[int.Parse(instructions[i]) - 1]);
+                    queue.Add(Arrows[(int.Parse(instructions[i]) + 5) % 8]);
                 else
                 {
                     yield return "sendtochaterror Invalid arrow number: " + instructions[i];
